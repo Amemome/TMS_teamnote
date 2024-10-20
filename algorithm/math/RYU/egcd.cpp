@@ -12,7 +12,7 @@ ll binary_gcd(ll a,ll b) { //큰 수에 대해서 사용.
         if(a>b) swap(a,b); b-=a;
     }
     return a << shift;
-}
+}   
 
 struct egcdResult {
     ll gcd,x,y;
@@ -44,3 +44,4 @@ pair<ll,ll> crtmany(const vector<ll> &a,const vector<ll> &m) {
         if(mm == -1) return {-1,-1}; else tie(ra,rm) = tie(aa,mm);
     }return {ra,rm};
 }
+
