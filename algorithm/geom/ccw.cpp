@@ -2,6 +2,7 @@
 using namespace std;
 typedef long long ll;
 typedef pair<int, int> pi;
+typedef pair<pi, pi> ppi;
 
 static inline int __reduce(ll a)
 {
