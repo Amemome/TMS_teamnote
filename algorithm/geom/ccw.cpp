@@ -2,6 +2,7 @@
 using namespace std;
 typedef long long ll;
 typedef pair<int, int> pi;
+typedef pair<pi, pi> ppi;
 
 // vector cross product.
 static inline ll __pi_cross(const pi& a, const pi& b)
