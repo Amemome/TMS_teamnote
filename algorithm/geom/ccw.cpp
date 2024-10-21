@@ -2,30 +2,6 @@
 using namespace std;
 typedef long long ll;
 typedef pair<int, int> pi;
-typedef pair<pi, pi> ppi;
-
-static inline int __reduce(ll a)
-{
-	if (a > 0)
-		return 1;
-
-	if (a < 0)
-		return -1;
-
-	return 0;
-}
-
-// integer square function.
-static inline ll __isq(int a)
-{
-	return (ll) a*a;
-}
-
-// vector subtraction.
-static inline pi __pi_sub(const pi& a, const pi& b)
-{
-	return pi(a.first-b.first, a.second-b.second);
-}
 
 // vector cross product.
 static inline ll __pi_cross(const pi& a, const pi& b)
@@ -33,16 +9,10 @@ static inline ll __pi_cross(const pi& a, const pi& b)
 	return (ll) a.first*b.second - (ll) a.second*b.first;
 }
 
-// square distance between two points.
-static inline ll __pi_sqdist(const pi& a, const pi& b)
-{
-	return __isq(a.first-b.first) + __isq(a.second-b.second);
-}
-
 // orientation of 3 points: -1 (clockwise), 0 (linear), 1 (counterclockwise)
 static inline int __pi_ort(const pi& a, const pi& b, const pi& c)
 {
-	return __reduce(__pi_cross(__pi_sub(b, a), __pi_sub(c, b)));
+	return __reduce(__pi_cross(ab_vector, bc_vector));
 }
 
 // convex hull algorithm (graham scan method).
@@ -70,8 +40,9 @@ int cvx_hull(vector<pi>& coords, int n)
 
 		if (ort < 0)
 			return false;
-
-		return __pi_sqdist(pivot, a) < __pi_sqdist(pivot, b);
+		
+		// 'dist' must be defined separately.
+		return dist(pivot, a) < dist(pivot, b);
 	});
 
 	vector<pi> res;
