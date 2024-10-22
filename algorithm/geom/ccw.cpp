@@ -25,10 +25,8 @@ int cvx_hull(vector<pi>& coords, int n)
 
 		res.push_back(coords[i]);
 	}
-
 	return res.size();
 }
-
 // line segment intersection check.
 bool sgmt_check(ppi l1, ppi l2)
 {

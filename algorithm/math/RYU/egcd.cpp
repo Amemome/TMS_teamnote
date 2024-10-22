@@ -1,8 +1,7 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-typedef long long ll;
-
+ll POW(ll a, ll b, ll MMM) {
+    ll ret = 1; for (; b; b >>= 1, a = (a * a) % MMM)
+    if (b & 1)ret = (ret * a) % MMM; return ret; }
+ll mod(ll a,ll m) {return (a % m + m) % m;}
 ll binary_gcd(ll a,ll b) { //큰 수에 대해서 사용.
     if(a==0||b==0) return a+b;
     int shift = __builtin_ctzll(a|b);
@@ -13,7 +12,6 @@ ll binary_gcd(ll a,ll b) { //큰 수에 대해서 사용.
     }
     return a << shift;
 }   
-
 struct egcdResult {
     ll gcd,x,y;
 };
@@ -25,10 +23,7 @@ egcdResult egcd(ll a,ll b) {
     ll x = res.y;
     ll y = res.x - (a/b) * res.y;
     return {res.gcd,x,y};
-}
-
-ll mod(ll a,ll m) {return (a % m + m) % m;}
-// x인 해와 그 mod
+}   // x인 해와 그 mod
 pair<ll,ll> crt(ll a1, ll m1,ll a2, ll m2) {
     ll g = gcd(m1,m2) , m = m1 / g * m2;
     if((a2 - a1) % g) return {-1,-1};//crt의 해가 존재X
