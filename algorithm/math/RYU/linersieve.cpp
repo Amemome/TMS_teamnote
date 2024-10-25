@@ -30,3 +30,5 @@ void sieve() { //tau=약수의개수,sigma=약수의합,sp=최소소인수
         }
     }
 }
+
+
