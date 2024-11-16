@@ -51,6 +51,4 @@ int main()
 
 	test1.insert(p1);
 	test2.insert(p2);
-
-	return 0;
 }
