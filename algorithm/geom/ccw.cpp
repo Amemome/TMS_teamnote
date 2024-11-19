@@ -1,18 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
 typedef pair<int, int> pi;
-typedef pair<pi, pi> ppi;
+
+static inline int __reduce(ll a)
+{
+	if (a > 0)
+		return 1;
+
+	if (a < 0)
+		return -1;
+
+	return 0;
+}
+
+// integer square function.
+static inline ll __isq(int a)
+{
+	return (ll) a*a;
+}
+
+// vector subtraction.
+static inline pi __pi_sub(const pi& a, const pi& b)
+{
+	return pi(a.first-b.first, a.second-b.second);
+}
+
+// vector cross product.
+static inline ll __pi_cross(const pi& a, const pi& b)
+{
+	return (ll) a.first*b.second - (ll) a.second*b.first;
+}
+
+// square distance between two points.
+static inline ll __pi_sqdist(const pi& a, const pi& b)
+{
+	return __isq(a.first-b.first) + __isq(a.second-b.second);
+}
 
 // orientation of 3 points: -1 (clockwise), 0 (linear), 1 (counterclockwise)
-int pi_ort(const pi& a, const pi& b, const pi& c)
+static inline int __pi_ort(const pi& a, const pi& b, const pi& c)
 {
-	return pi_cross(ab_vector, bc_vector));
+	return __reduce(__pi_cross(__pi_sub(b, a), __pi_sub(c, b)));
 }
 
 // convex hull algorithm (graham scan method).
 int cvx_hull(vector<pi>& coords, int n)
 {
 	pi pivot = pi(INT_MAX, INT_MAX);
-	// find the left-most, bottom-most coordinate.
-	// sort the coordinates in counter-clockwise order.
+	int __pivot_idx;
+
+	for (int i = 0; i < n; i++)
+	{
+		if (coords[i] < pivot)
+		{
+			pivot = coords[i];
+			__pivot_idx = i;
+		}
+	}
+
+	swap(coords[0], coords[__pivot_idx]);
+	sort(coords.begin()+1, coords.end(), [&pivot](const pi& a, const pi& b)
+	{
+		int ort = __pi_ort(pivot, a, b);
+
+		if (ort > 0)
+			return true;
+
+		if (ort < 0)
+			return false;
+
+		return __pi_sqdist(pivot, a) < __pi_sqdist(pivot, b);
+	});
 
 	vector<pi> res;
 	res.push_back(coords[0]);
@@ -20,13 +79,15 @@ int cvx_hull(vector<pi>& coords, int n)
 
 	for (int i = 2; i < n; i++)
 	{
-		while (res.size() > 1 && pi_ort(res.end()[-2], res.end()[-1], coords[i]) <= 0)
+		while (res.size() > 1 && __pi_ort(res.end()[-2], res.end()[-1], coords[i]) <= 0)
 			res.pop_back();
 
 		res.push_back(coords[i]);
 	}
+
 	return res.size();
 }
+
 // line segment intersection check.
 bool sgmt_check(ppi l1, ppi l2)
 {
@@ -35,8 +96,8 @@ bool sgmt_check(ppi l1, ppi l2)
 	pi c = l2.first;
 	pi d = l2.second;
 
-	int ab = pi_ort(a, b, c) * pi_ort(a, b, d);
-	int cd = pi_ort(c, d, a) * pi_ort(c, d, b);
+	int ab = __pi_ort(a, b, c) * __pi_ort(a, b, d);
+	int cd = __pi_ort(c, d, a) * __pi_ort(c, d, b);
 
 	if (ab == 0 && cd == 0)
 	{
