@@ -17,8 +17,8 @@ stack<int> &S, vector<vector<int>> &adj,vector<vector<int>> &scc) {
     if(parent == P[x]) {
         vector<int> SCC;
         while(true) {
-            int y = S.top(); //타잔 알고리즘에 scc 저장되는 순서는
-            S.pop();         //위상정렬의 역순이라고 보면 됨.
+            int y = S.top();
+            S.pop();
             SCC.push_back(y);
             finished[y] = true;
             if(y==x) break;
@@ -37,6 +37,7 @@ int main(void)
     while(tt--) {
         int n,m; 
         cin >> n >> m;
+        map<int,int> indegree;
         int id = 0; int P[n+1] = {0};//id:정점번호,부모체크
         bool finished[n+1] = {0};//scc에 속한 정점체크
         vector<vector<int>> adj(n+1); //정점x 인접그래프
@@ -51,19 +52,15 @@ int main(void)
         for(int i = 1; i <= n; i++) {
             if(P[i]==0) findscc(i,id,P,finished,S,adj,scc);
         }
-        sort(scc.begin(),scc.end());
-        cout << scc.size() << '\n';
-        for(int a = 1; a <= n; a++) {
-            for(auto x : adj[a]) {
-                pressedadj[P[a]].push_back(P[x]);
+        for(int i = 1; i <= n; i++) indegree[P[i]] = 0;
+        for(int i = 1; i <= n; i++) { // i -> j 로 가는 간선.
+            for(auto j : adj[i]) {
+                if(P[i] != P[j]) indegree[P[j]] = 1;
             }
         }
-        for(int a = 1; a <= n; a++) {
-            cout << a << ":";
-            for(auto x : pressedadj[a]) {
-                cout << x << ' ';
-            }
-        } 
+        int result = 0;
+        for(auto x : indegree) if(x.second == 0) result++;
+        cout << result << '\n';
     }    
     return 0;
 }
