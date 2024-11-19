@@ -26,7 +26,7 @@ struct itriple
 	}
 };
 
-int disjoint_root(vector<int>& forest, int a)
+int disjoint_root(vector<int>& forest, int a) //find
 {
 	if (forest[a] == a)
 		return a;
@@ -36,7 +36,7 @@ int disjoint_root(vector<int>& forest, int a)
 }
 
 int disjoint_merge(vector<int>& forest, vector<int>& __size, int a, int b)
-{
+{ //union
 	int root_a = disjoint_root(forest, a);
 	int root_b = disjoint_root(forest, b);
 

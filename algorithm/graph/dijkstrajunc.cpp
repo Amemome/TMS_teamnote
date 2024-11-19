@@ -8,7 +8,7 @@ int d[20005];
 int sum[20005];
 const int INF = INT_MAX;
 
-int dike(int start,int v) {
+int dike(int start,int v) { //특정 노드까지 왕복시간을 찾기
     fill(d,d+v+1,INF);
     priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
     d[start] = 0;
