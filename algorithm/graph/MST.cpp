@@ -26,7 +26,8 @@ struct itriple
 	}
 };
 
-int disjoint_root(vector<int>& forest, int a) //find
+// find the root of an element in a forest; the paths are recursively compressed to improve performance of future calls.
+int disjoint_root(vector<int>& forest, int a)
 {
 	if (forest[a] == a)
 		return a;
@@ -35,8 +36,10 @@ int disjoint_root(vector<int>& forest, int a) //find
 	return forest[a];
 }
 
-int disjoint_merge(vector<int>& forest, vector<int>& __size, int a, int b)
-{ //union
+// merge the two elements in a forest (size based).
+// returns zero if merging is unnecessary (already in the same group); otherwise, the elements are merged and 1 is returned.
+int disjoint_merge_size(vector<int>& forest, vector<int>& __size, int a, int b)
+{
 	int root_a = disjoint_root(forest, a);
 	int root_b = disjoint_root(forest, b);
 
@@ -52,6 +55,29 @@ int disjoint_merge(vector<int>& forest, vector<int>& __size, int a, int b)
 	{
 		forest[root_b] = root_a;
 		__size[root_a] += __size[root_b];
+	}
+
+	return 1;
+}
+
+// merge the two elements in a forest (rank based).
+// returns zero if merging is unnecessary (already in the same group); otherwise, the elements are merged and 1 is returned.
+int disjoint_merge_rank(vector<int> &forest, vector<int>& __rank, int a, int b)
+{
+	int root_a = disjoint_root(forest, a);
+	int root_b = disjoint_root(forest, b);
+
+	if (root_a == root_b)
+		return 0;
+
+	if (__rank[root_a] < __rank[root_b])
+		forest[root_b] = root_a;
+	else if (__rank[root_a] > __rank[root_b])
+		forest[root_a] = root_b;
+	else
+	{
+		forest[root_b] = root_a;
+		__rank[root_a]++;
 	}
 
 	return 1;
@@ -76,15 +102,18 @@ int main()
 
 	vector<int> forest(v+1);
 	vector<int> __size(v+1);
+	vector<int> __rank(v+1);
 	for (int i = 1; i <= v; i++)
 	{
 		forest[i] = i;
 		__size[i] = 1;
+		__rank[i] = 1;
 	}
 
 	int ans = 0;
 	for (const itriple& edge : edges)
-		ans += disjoint_merge(forest, __size, edge.y, edge.z) * edge.x;
+		ans += disjoint_merge_rank(forest, __rank, edge.y, edge.z) * edge.x;
+		// ans += disjoint_merge_size(forest, __size, edge.y, edge.z) * edge.x;
 	
 	cout << ans << '\n';
 	return 0;
