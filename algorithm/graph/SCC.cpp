@@ -17,8 +17,8 @@ stack<int> &S, vector<vector<int>> &adj,vector<vector<int>> &scc) {
     if(parent == P[x]) {
         vector<int> SCC;
         while(true) {
-            int y = S.top();
-            S.pop();
+            int y = S.top(); //타잔 알고리즘에 scc 저장되는 순서는
+            S.pop();         //위상정렬의 역순이라고 보면 됨.
             SCC.push_back(y);
             finished[y] = true;
             if(y==x) break;
