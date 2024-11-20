@@ -1,40 +1,36 @@
-/* A Naive recursive implementation of
- 0-1 Knapsack problem */
 #include <bits/stdc++.h>
 using namespace std;
 
-// Returns the maximum value that
-// can be put in a knapsack of capacity W
-int knapSack(int W, int wt[], int val[], int n)
-{
-
-    // Base Case
-    if (n == 0 || W == 0)
-        return 0;
-
-    // If weight of the nth item is more
-    // than Knapsack capacity W, then
-    // this item cannot be included
-    // in the optimal solution
-    if (wt[n - 1] > W)
-        return knapSack(W, wt, val, n - 1);
-
-    // Return the maximum of two cases:
-    // (1) nth item included
-    // (2) not included
-    else
-        return max(knapSack(W, wt, val, n - 1), 
-         val[n - 1] + knapSack(W - wt[n - 1], wt, val, n - 1));
-}
-
-// Driver code
 int main()
 {
-    int profit[] = { 60, 100, 120 };
-    int weight[] = { 10, 20, 30 };
-    int W = 50;
-    int n = sizeof(profit) / sizeof(profit[0]);
-    cout << knapSack(W, weight, profit, n);
-    return 0;
-}
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
 
+	int N, K;
+	cin >> N >> K;
+
+	// weight, value.
+	vector<int> W(N+1);
+	vector<int> V(N+1);
+
+	for (int i = 1; i <= N; i++)
+		cin >> W[i] >> V[i];
+
+	vector<vector<int>> dp(N+1, vector<int>(K+1));
+
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= K; j++)
+		{
+			// the value when the current item is ignored.
+			dp[i][j] = dp[i-1][j];
+
+			// the value when the current item is taken.
+			if (W[i] <= j)
+				dp[i][j] = max(dp[i][j], dp[i-1][j-W[i]] + V[i]);
+		}
+	}
+
+	cout << dp[N][K] << '\n';
+	return 0;
+}
