@@ -1,63 +1,39 @@
-// Here is the top-down approach of
-// dynamic programming
 #include <bits/stdc++.h>
 using namespace std;
 
-// Returns the value of maximum profit
-int knapSackRec(int W, int wt[], int val[], int index, int** dp)
+int knapsack(int i, int j, vector<int>& W, vector<int>& V, vector<vector<int>>& dp)
 {
-    // base condition
-    if (index < 0)
-        return 0;
-    if (dp[index][W] != -1)
-        return dp[index][W];
+	if (i == 0)
+		return 0;
 
-    if (wt[index] > W) {
+	if (dp[i][j] != -1)
+		return dp[i][j];
 
-        // Store the value of function call
-        // stack in table before return
-        dp[index][W] = knapSackRec(W, wt, val, index - 1, dp);
-        return dp[index][W];
-    }
-    else {
-        // Store value in a table before return
-        dp[index][W] = max(val[index]
-                           + knapSackRec(W - wt[index], wt, val,
-                                         index - 1, dp),
-                       knapSackRec(W, wt, val, index - 1, dp));
+	int __cache = knapsack(i-1, j, W, V, dp);
 
-        // Return value of table after storing
-        return dp[index][W];
-    }
+	if (W[i] <= j)
+		__cache = max(__cache, knapsack(i-1, j-W[i], W, V, dp) + V[i]);
+
+	dp[i][j] = __cache;
+	return __cache;
 }
 
-int knapSack(int W, int wt[], int val[], int n)
-{
-    // double pointer to declare the
-    // table dynamically
-    int** dp;
-    dp = new int*[n];
-
-    // loop to create the table dynamically
-    for (int i = 0; i < n; i++)
-        dp[i] = new int[W + 1];
-
-    // loop to initially filled the
-    // table with -1
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < W + 1; j++)
-            dp[i][j] = -1;
-    return knapSackRec(W, wt, val, n - 1, dp);
-}
-
-// Driver Code
 int main()
 {
-    int profit[] = { 60, 100, 120 };
-    int weight[] = { 10, 20, 30 };
-    int W = 50;
-    int n = sizeof(profit) / sizeof(profit[0]);
-    cout << knapSack(W, weight, profit, n);
-    return 0;
-}
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
 
+	int N, K;
+	cin >> N >> K;
+
+	// weight, value.
+	vector<int> W(N+1);
+	vector<int> V(N+1);
+
+	for (int i = 1; i <= N; i++)
+		cin >> W[i] >> V[i];
+
+	vector<vector<int>> dp(N+1, vector<int>(K+1, -1));
+	cout << knapsack(N, K, W, V, dp) << '\n';
+	return 0;
+}
